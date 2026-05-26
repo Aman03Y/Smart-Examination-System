@@ -5,8 +5,8 @@ RUN npm install -g pnpm
 
 WORKDIR /app
 
-# Copy package management files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Copy lockfiles and package definitions
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -14,11 +14,13 @@ RUN pnpm install --frozen-lockfile
 # Copy the rest of your application code
 COPY . .
 
+# Disable Next.js telemetry during the build
+ENV NEXT_TELEMETRY_DISABLED=1
+
 # Build the Next.js application
 RUN pnpm build
 
 # Expose Next.js default port
 EXPOSE 3000
 
-# Start Next.js in production mode
 CMD ["pnpm", "start"]
