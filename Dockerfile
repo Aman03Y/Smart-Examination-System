@@ -1,29 +1,35 @@
-FROM node:20-alpine AS base
-
-# Install pnpm globally
-RUN npm install -g pnpm
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy lockfiles and package definitions
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+RUN npm install -g pnpm
 
-# Install dependencies
+COPY package.json pnpm-lock.yaml* ./
+
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of your application code
 COPY . .
 
-# Disable Next.js telemetry during the build
+# Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Mock the database URI so Next.js can compile safely
-ENV MONGODB_URI="mongodb+srv://aman:aman@cluster0.vmv97za.mongodb.net/"
+# -----------------------------
+# BUILD ARGUMENTS
+# -----------------------------
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG CLERK_SECRET_KEY
+ARG MONGODB_URI
 
-# Build the Next.js application
+# -----------------------------
+# ENV VARIABLES
+# -----------------------------
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Zmlyc3QtaGFkZG9jay02NC5jbGVyay5hY2NvdW50cy5kZXYk
+ENV CLERK_SECRET_KEY=sk_test_TA6oroMUohxv3gT7QUC5SG8qqncRwVv1QOauCySzqn
+ENV MONGODB_URI=mongodb+srv://aman:aman@cluster0.vmv97za.mongodb.net/
+
+# Build app
 RUN pnpm build
 
-# Expose Next.js default port
 EXPOSE 3000
 
 CMD ["pnpm", "start"]
