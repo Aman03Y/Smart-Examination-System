@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  # --- 1. NEXT.JS FULL-STACK APP ---
+  web:
+    build: .
+    container_name: smart_exam_nextjs
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # Connects directly to the 'db' service defined below
+      - MONGODB_URI=mongodb+srv://aman:aman@cluster0.vmv97za.mongodb.net/
+      # Add your Clerk environment variables here if needed for server-side
+      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Zmlyc3QtaGFkZG9jay02NC5jbGVyay5hY2NvdW50cy5kZXYk
+      - CLERK_SECRET_KEY=sk_test_TA6oroMUohxv3gT7QUC5SG8qqncRwVv1QOauCySzqn
+    depends_on:
+      - db
+    networks:
+      - exam_network
+
+  # --- 2. DATABASE: MongoDB ---
+  db:
+    image: mongo:latest
+    container_name: exam_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - exam_network
+
+volumes:
+  mongo_data:
+
+networks:
+  exam_network:
+    driver: bridge
