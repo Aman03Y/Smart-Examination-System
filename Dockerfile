@@ -17,6 +17,9 @@ COPY . .
 # Disable Next.js telemetry during the build
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Mock the database URI so Next.js can compile safely
+ENV MONGODB_URI="mongodb+srv://aman:aman@cluster0.vmv97za.mongodb.net/"
+
 # Build the Next.js application
 RUN pnpm build
 
