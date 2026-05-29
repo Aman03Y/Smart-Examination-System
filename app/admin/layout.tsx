@@ -36,34 +36,36 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900">
-      <aside className="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700">
-        <div className="p-6">
-          <h1 className="text-xl font-bold text-slate-800 dark:text-white">
-            Admin Portal
-          </h1>
+      <aside className="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between h-screen sticky top-0">
+        <div>
+          <div className="p-6">
+            <h1 className="text-xl font-bold text-slate-800 dark:text-white">
+              Admin Portal
+            </h1>
+          </div>
+          <nav className="mt-6 px-4 space-y-2">
+            <Link
+              href="/admin"
+              className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/admin/exams"
+              className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+            >
+              Exams
+            </Link>
+            {/* Question Bank Link Removed - Managed via Exams */}
+            <Link
+              href="/admin/results"
+              className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+            >
+              Results
+            </Link>
+          </nav>
         </div>
-        <nav className="mt-6 px-4 space-y-2">
-          <Link
-            href="/admin"
-            className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/admin/exams"
-            className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
-          >
-            Exams
-          </Link>
-          {/* Question Bank Link Removed - Managed via Exams */}
-          <Link
-            href="/admin/results"
-            className="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
-          >
-            Results
-          </Link>
-        </nav>
-        <div className="absolute bottom-0 p-4 w-full border-t border-slate-200 dark:border-slate-700">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-700">
           <AdminProfile
             name={user.firstName || user.emailAddresses[0].emailAddress}
             email={user.emailAddresses[0].emailAddress}

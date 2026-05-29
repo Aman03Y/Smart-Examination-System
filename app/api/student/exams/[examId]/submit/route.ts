@@ -5,6 +5,7 @@ import Exam from "@/models/Exam";
 import Question from "@/models/Question";
 import Result from "@/models/Result";
 import User from "@/models/User";
+import Attempt from "@/models/Attempt";
 
 export async function POST(
   req: NextRequest,
@@ -54,7 +55,7 @@ export async function POST(
         // Since we didn't send IDs per option explicitly to client (mongoose subdocs have IDs), we can use IDs.
         // Client receives options with _id.
 
-        if (submittedAnswer.selectedOptionId === correctOption._id.toString()) {
+        if (correctOption && submittedAnswer.selectedOptionId === correctOption._id.toString()) {
           score += q.marks;
           isCorrect = true;
         } else {
@@ -76,6 +77,12 @@ export async function POST(
       totalMarks: exam.totalMarks,
       answers: processedAnswers,
     });
+
+    // Update Attempt status to completed
+    await Attempt.findOneAndUpdate(
+      { userId: dbUser._id, examId: exam._id, status: "in-progress" },
+      { status: "completed" }
+    );
 
     return NextResponse.json(result);
   } catch (error) {

@@ -44,6 +44,11 @@ export default function ExamPage() {
 
   // Answers State
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
+  const answersRef = useRef(answers);
+
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
 
   // Security State
   const [hasStarted, setHasStarted] = useState(false);
@@ -73,7 +78,7 @@ export default function ExamPage() {
       await document.exitFullscreen().catch(() => {});
     }
 
-    const formatAnswers = Object.entries(answers).map(([qId, optId]) => ({
+    const formatAnswers = Object.entries(answersRef.current).map(([qId, optId]) => ({
       questionId: qId,
       selectedOptionId: optId,
     }));
@@ -97,9 +102,9 @@ export default function ExamPage() {
       console.error(e);
       toast.error("Failed to submit exam. Please contact support.");
     }
-  }, [answers, examId, router]); // Removed submitting from dep to avoid stale closure issues if called from event listener
+  }, [examId, router]);
 
-  const logViolation = async () => {
+  const logViolation = useCallback(async () => {
     try {
       await fetch(`/api/student/exams/${examId}/violation`, {
         method: "POST",
@@ -107,7 +112,7 @@ export default function ExamPage() {
     } catch (err) {
       console.error("Failed to log violation", err);
     }
-  };
+  }, [examId]);
 
   // Fetch Exam Data
   useEffect(() => {

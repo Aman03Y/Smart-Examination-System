@@ -38,8 +38,14 @@ async function connectDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose.connection;
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then(async (m) => {
+      // Clean up legacy unique indexes on the users collection if they exist
+      try {
+        await m.connection.db?.collection("users").dropIndex("userName_1");
+      } catch (err) {
+        // Index not found or collection doesn't exist, safe to ignore
+      }
+      return m.connection;
     });
   }
   try {

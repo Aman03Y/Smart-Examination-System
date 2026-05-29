@@ -12,12 +12,12 @@ export default async function StudentDashboard() {
   await connectDB();
 
   // Ensure user exists in DB
-  const dbUser = await User.findOne({ clerkId: user.id });
+  let dbUser = await User.findOne({ clerkId: user.id });
   if (!dbUser) {
-    await User.create({
+    dbUser = await User.create({
       clerkId: user.id,
       email: user.emailAddresses[0].emailAddress,
-      name: `${user.firstName} ${user.lastName}`,
+      name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.emailAddresses[0].emailAddress,
       role: "student",
     });
   }

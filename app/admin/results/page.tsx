@@ -11,7 +11,7 @@ export default async function AdminResultsPage() {
   const results = await Result.find({})
     .populate("userId", "name email")
     .populate("examId", "title totalMarks")
-    .sort({ createdAt: -1 });
+    .sort({ completedAt: -1 });
 
   return (
     <div className="space-y-6">
@@ -88,11 +88,8 @@ export default async function AdminResultsPage() {
                         </span>
                       </td>
                       <td className="p-4 align-middle">
-                        {result.createdAt || result.completedAt
-                          ? format(
-                              new Date(result.createdAt || result.completedAt),
-                              "PPP p"
-                            )
+                        {result.completedAt
+                          ? format(new Date(result.completedAt), "PPP p")
                           : "N/A"}
                       </td>
                     </tr>
