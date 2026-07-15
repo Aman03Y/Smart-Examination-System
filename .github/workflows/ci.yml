@@ -32,3 +32,11 @@ jobs:
 
       - name: Build Next.js App
         run: pnpm build
+        
+      - name: Build Next.js
+        run: pnpm build
+        env:
+          MONGODB_URI: mongodb+srv://aman:aman@cluster0.vmv97za.mongodb.net/
+          CLERK_SECRET_KEY: sk_test_TA6oroMUohxv3gT7QUC5SG8qqncRwVv1QOauCySzqn
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Zmlyc3QtaGFkZG9jay02NC5jbGVyay5hY2NvdW50cy5kZXYk
+          ADMIN_EMAIL: mca-reg202527223@timscdrmumbai.in 
