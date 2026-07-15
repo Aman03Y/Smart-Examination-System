@@ -2,19 +2,21 @@ name: CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.27.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -22,15 +24,10 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Next.js
+      - name: Build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
