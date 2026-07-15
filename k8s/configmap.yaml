@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smart-exam-config
+  namespace: smart-exam
+
+data:
+  NEXT_TELEMETRY_DISABLED: "1"
+  ADMIN_EMAIL: "mca-reg202527223@timscdrmumbai.in"
