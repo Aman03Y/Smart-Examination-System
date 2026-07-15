@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smart-exam-ingress
+  namespace: smart-exam
+spec:
+  ingressClassName: nginx
+
+  rules:
+    - host: smart-exam.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: smart-exam-service
+                port:
+                  number: 80
